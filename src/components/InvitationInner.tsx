@@ -96,7 +96,7 @@ export function InvitationInner({ handleShowContent }: InvitationInnerProps) {
                 </p>
 
                 <div
-                  className="relative w-full flex items-center justify-center flex-col mt-6 min-h-20 cursor-pointer"
+                  className="relative w-full flex items-center justify-center flex-col mt-6 min-h-20 cursor-pointer active:scale-95 duration-150 ease-out transition-transform"
                   onClick={() => handleShowContent(true)}
                 >
                   <Image

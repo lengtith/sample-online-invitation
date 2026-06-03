@@ -9,7 +9,7 @@ export default function Home() {
   const [showContent, setShowContent] = React.useState<boolean>(false);
   const [isMusicPlaying, setIsMusicPlaying] = React.useState<boolean>(true);
 
-  const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playMusic = () => {
     if (audioRef.current) {
@@ -34,12 +34,16 @@ export default function Home() {
       }
     >
       <div className="fixed w-full z-30 flex items-center justify-between px-6 py-4 bg-transparent">
-        <button onClick={() => setShowContent(false)}>🔙</button>
+        <button
+          className={`${showContent ? "block" : "opacity-0 pointer-events-none"}`}
+          onClick={() => setShowContent(false)}
+        >
+          🔙
+        </button>
 
         <audio ref={audioRef} autoPlay loop>
           <source src="/music/wedding.mp3" type="audio/mpeg" />
         </audio>
-
         {isMusicPlaying ? (
           <button onClick={pauseMusic}>🔊</button>
         ) : (

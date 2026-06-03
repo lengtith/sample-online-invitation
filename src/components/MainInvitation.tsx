@@ -39,25 +39,37 @@ export const MainInvitation = () => {
     const targets = Array.from(
       container.querySelectorAll<HTMLElement>(".scroll-reveal"),
     );
+
+    const resetReveal = (el: HTMLElement) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(24px)";
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const target = entry.target as HTMLElement;
           if (entry.isIntersecting) {
-            animate(entry.target, {
+            animate(target, {
               opacity: [0, 1],
               translateY: [24, 0],
               duration: 700,
               easing: "easeOutQuad",
               delay: 100,
             });
-            observer.unobserve(entry.target);
+          } else {
+            resetReveal(target);
           }
         });
       },
       { threshold: 0.2 },
     );
 
-    targets.forEach((el) => observer.observe(el));
+    targets.forEach((el) => {
+      resetReveal(el);
+      observer.observe(el);
+    });
+
     return () => observer.disconnect();
   }, []);
 
@@ -198,7 +210,7 @@ export const MainInvitation = () => {
           <section className="scroll-reveal opacity-0 translate-y-8 w-full px-6 flex flex-col gap-6 text-center">
             {/* Groom Parents Panel */}
             <div className="bg-[#fdfcf9] dark:bg-[#1a1715]/40 p-5 rounded-2xl border border-amber-200/20 shadow-sm flex flex-col items-center">
-              <span className="text-[11px] text-amber-700 dark:text-[#d4af37] font-bold uppercase tracking-wider mb-2">
+              <span className="text-xs text-amber-700 dark:text-[#d4af37] font-bold uppercase tracking-wider mb-2">
                 មាតាបិតាខាងកូនកំលោះ
               </span>
               <div className="flex flex-col gap-1 text-sm font-bold text-zinc-800 dark:text-zinc-200">
@@ -206,7 +218,7 @@ export const MainInvitation = () => {
                 <p>លោកស្រី ម៉ៅ សុភី</p>
               </div>
               <div className="w-8 h-px bg-amber-200/50 my-3"></div>
-              <span className="text-[10px] text-zinc-500 font-medium mb-1">
+              <span className="text-xs text-zinc-500 font-medium mb-1">
                 មានកិត្តិយសរៀបចំអាពាហ៍ពិពាហ៍កូនប្រុស
               </span>
               <p className="font-moul text-sm text-amber-900 dark:text-[#eddca7] leading-relaxed">
@@ -216,7 +228,7 @@ export const MainInvitation = () => {
 
             {/* Bride Parents Panel */}
             <div className="bg-[#fdfcf9] dark:bg-[#1a1715]/40 p-5 rounded-2xl border border-amber-200/20 shadow-sm flex flex-col items-center">
-              <span className="text-[11px] text-amber-700 dark:text-[#d4af37] font-bold uppercase tracking-wider mb-2">
+              <span className="text-xs text-amber-700 dark:text-[#d4af37] font-bold uppercase tracking-wider mb-2">
                 មាតាបិតាខាងកូនស្រី
               </span>
               <div className="flex flex-col gap-1 text-sm font-bold text-zinc-800 dark:text-zinc-200">
@@ -224,7 +236,7 @@ export const MainInvitation = () => {
                 <p>លោកស្រី ហ៊ឹម ស្រីមុំ</p>
               </div>
               <div className="w-8 h-px bg-amber-200/50 my-3"></div>
-              <span className="text-[10px] text-zinc-500 font-medium mb-1">
+              <span className="text-xs text-zinc-500 font-medium mb-1">
                 មានកិត្តិយសរៀបចំអាពាហ៍ពិពាហ៍កូនស្រី
               </span>
               <p className="font-moul text-sm text-amber-900 dark:text-[#eddca7] leading-relaxed">
@@ -328,7 +340,7 @@ export const MainInvitation = () => {
 
             <div className="w-full bg-[#fdfcf9] dark:bg-[#1a1715]/40 rounded-2xl border border-amber-200/30 p-6 flex flex-col items-center text-center shadow-sm">
               <span className="text-3xl mb-3">📍</span>
-              <h4 className="text-sm font-bold text-zinc-800 dark:text-zinc-100 mb-1 leading-relaxed">
+              <h4 className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 mb-1 leading-relaxed">
                 មជ្ឈមណ្ឌលរៀបចំពិធីមង្គលការ សែនសុខ
               </h4>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 px-4 leading-relaxed">
@@ -340,9 +352,9 @@ export const MainInvitation = () => {
                 href="https://maps.google.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 bg-[#aa7c11] hover:bg-[#8e650c] text-white text-[11px] font-bold py-2.5 px-6 rounded-full shadow-md transition-colors duration-300 flex items-center gap-2"
+                className="mt-6 bg-[#aa7c11] hover:bg-[#8e650c] text-white text-xs font-semibold py-2.5 px-6 rounded-xl shadow-md transition-colors duration-300 flex items-center gap-2"
               >
-                <span>បើកមើលផែនទី Google Maps 🗺️</span>
+                <span>បើកមើលផែនទី Google Maps</span>
               </a>
             </div>
           </section>
@@ -498,7 +510,7 @@ export const MainInvitation = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-[#aa7c11] hover:bg-[#8e650c] text-white text-xs font-bold py-3.5 rounded-xl shadow-md transition-colors duration-300 mt-2"
+                    className="w-full bg-[#aa7c11] hover:bg-[#8e650c] text-white text-xs font-semibold py-3.5 rounded-xl shadow-md transition-colors duration-300 mt-2"
                   >
                     ផ្ញើការឆ្លើយតប និងពាក្យជូនពរ
                   </button>
@@ -513,7 +525,7 @@ export const MainInvitation = () => {
               ពាក្យជូនពរពីភ្ញៀវកិត្តិយស
             </h3>
 
-            <div className="w-full flex flex-col gap-4 max-h-87.5 overflow-y-auto pr-1">
+            <div className="w-full flex flex-col gap-4 overflow-y-auto pr-1">
               {wishesList.map((wish) => (
                 <div
                   key={wish.id}
@@ -528,7 +540,7 @@ export const MainInvitation = () => {
                     <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 font-moul leading-relaxed">
                       {wish.name}
                     </span>
-                    <span className="text-[9px] bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-[#f3e5ab] px-2 py-0.5 rounded-full font-semibold">
+                    <span className="text-xs bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-[#f3e5ab] px-2 py-0.5 rounded-full font-medium">
                       {wish.relation}
                     </span>
                   </div>
@@ -536,7 +548,7 @@ export const MainInvitation = () => {
                   <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed italic">
                     “{wish.content}”
                   </p>
-                  <span className="text-[9px] text-zinc-400 dark:text-zinc-500 self-end mt-2">
+                  <span className="text-xs text-zinc-400 dark:text-zinc-500 mt-2">
                     {wish.timestamp}
                   </span>
                 </div>
@@ -545,8 +557,8 @@ export const MainInvitation = () => {
           </section>
 
           {/* ================= FOOTER ================= */}
-          <footer className="w-full py-12 px-6 text-center border-t border-amber-200/20 bg-[#f5efe5]/20 mt-8 flex flex-col items-center">
-            <div className="relative w-24 h-6 mb-3 opacity-60">
+          <footer className="w-full py-8 px-6 text-center border-t border-amber-200/20 bg-amber-300/20 mt-8 flex flex-col items-center">
+            <div className="relative w-24 h-16 mb-3">
               <Image
                 src="/frame/ornament.png"
                 alt=""
@@ -557,7 +569,7 @@ export const MainInvitation = () => {
             <p className="font-moul text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
               សូមអរគុណយ៉ាងជ្រាលជ្រៅ
             </p>
-            <span className="text-[9px] text-zinc-400 font-playfair tracking-widest uppercase mt-1">
+            <span className="text-xs text-zinc-400 font-playfair tracking-widest uppercase mt-1">
               Thank You
             </span>
           </footer>
