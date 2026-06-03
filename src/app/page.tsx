@@ -33,13 +33,13 @@ export default function Home() {
         </div>
       }
     >
-      <div className="fixed w-full z-30 flex items-center justify-between px-6 py-4 bg-transparent">
-        <button
+      <div className="fixed w-full z-30 flex items-center justify-end px-6 py-4 bg-transparent">
+        {/* <button
           className={`${showContent ? "block" : "opacity-0 pointer-events-none"}`}
           onClick={() => setShowContent(false)}
         >
           🔙
-        </button>
+        </button> */}
 
         <audio ref={audioRef} autoPlay loop>
           <source src="/music/wedding.mp3" type="audio/mpeg" />
@@ -51,8 +51,8 @@ export default function Home() {
         )}
       </div>
 
-      {!showContent && <InvitationInner handleShowContent={setShowContent} />}
-      {showContent && <MainInvitation />}
+      {/* <InvitationInner /> */}
+      <MainInvitation />
     </Suspense>
   );
 }
