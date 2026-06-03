@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f5; /* Warm premium off-white/ivory background */
-  --foreground: #2d261f; /* Charcoal brown for soft, warm readability */
+  --background: #faf8f5;
+  /* Warm premium off-white/ivory background */
+  --foreground: #2d261f;
+  /* Charcoal brown for soft, warm readability */
   --gold-primary: #d4af37;
   --gold-light: #f3e5ab;
   --gold-dark: #aa7c11;
@@ -44,13 +46,16 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: rgba(212, 175, 55, 0.05);
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(212, 175, 55, 0.3);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(170, 124, 17, 0.6);
 }
@@ -70,13 +75,37 @@ body {
   border-color: rgba(212, 175, 55, 0.4);
 }
 
+/* Tailwind v4 */
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Animations */
 @keyframes heartBeat {
-  0% { transform: scale(1); }
-  14% { transform: scale(1.12); }
-  28% { transform: scale(1); }
-  42% { transform: scale(1.12); }
-  70% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.12);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.12);
+  }
+
+  70% {
+    transform: scale(1);
+  }
 }
 
 .animate-heartbeat {
@@ -84,9 +113,12 @@ body {
 }
 
 @keyframes pulseGold {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
   }
+
   50% {
     box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
   }
@@ -101,9 +133,11 @@ body {
     transform: translateY(0) scale(0.8);
     opacity: 0;
   }
+
   50% {
     opacity: 0.8;
   }
+
   100% {
     transform: translateY(-40px) scale(1.1);
     opacity: 0;
@@ -113,6 +147,7 @@ body {
 .animate-music-note-1 {
   animation: floatNotes 3s infinite ease-in-out;
 }
+
 .animate-music-note-2 {
   animation: floatNotes 3.5s infinite ease-in-out 1s;
 }

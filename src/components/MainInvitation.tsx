@@ -7,6 +7,7 @@ import { animate } from "animejs";
 
 import { tsParticles } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
+import Link from "next/link";
 
 // Main entry of invitation card in premium Khmer style
 export const MainInvitation = () => {
@@ -155,18 +156,18 @@ export const MainInvitation = () => {
   };
 
   return (
-    <div className="relative flex flex-col flex-1 items-center justify-center bg-zinc-50 dark:bg-[#1a1715] font-kantumruy">
+    <div className="relative flex flex-col flex-1 items-center justify-center bg-zinc-50 dark:bg-[#1a1715] font-kantumruy no-scrollbar">
+      <div
+        id="tsparticles"
+        className="max-w-md mx-auto overflow-x-hidden pointer-events-none absolute inset-0 z-20 overflow-hidden"
+      />
+
       <main
         ref={mainRef}
-        className="relative flex flex-col w-full max-w-md overflow-y-auto overflow-x-hidden min-h-screen"
+        className="relative flex flex-col w-full max-w-md overflow-y-auto overflow-x-hidden min-h-screen h-screen snap-y snap-mandatory no-scrollbar"
       >
-        <div
-          id="tsparticles"
-          className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
-        />
-
         {/* ================== INTRO INVITATION ================== */}
-        <div className="relative flex flex-1 w-full max-w-md flex-col items-center justify-center bg-white dark:bg-[#2d261f] overflow-hidden shadow-xl min-h-screen">
+        <div className="relative flex flex-1 w-full max-w-md flex-col items-center justify-center bg-white dark:bg-[#2d261f] overflow-hidden shadow-xl min-h-screen h-screen snap-start">
           {/* Center content */}
           <div className="relative z-10 flex flex-col w-2/3 h-screen items-center justify-center py-16">
             {/* Top ornament */}
@@ -206,7 +207,10 @@ export const MainInvitation = () => {
                   សូមគោរពអញ្ជើញ
                 </p>
 
-                <div className="relative w-full flex items-center justify-center flex-col mt-6 min-h-20 cursor-pointer active:scale-95 duration-150 ease-out transition-transform">
+                <Link
+                  href="#invitation-details"
+                  className="relative w-full flex items-center justify-center flex-col mt-6 min-h-20 cursor-pointer active:scale-95 duration-150 ease-out transition-transform"
+                >
                   <Image
                     src="/frame/decoration-border-name.png"
                     alt=""
@@ -217,14 +221,17 @@ export const MainInvitation = () => {
                   <h4 className="relative z-10 text-xl font-bold font-moul text-amber-950 dark:text-[#f3e5ab] px-4 py-2">
                     លោក ស្រី សុខា
                   </h4>
-                </div>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
         {/* ================= INVITATION DETAILS & PROGRAM ================= */}
-        <div className="relative z-10 flex w-full flex-col items-center bg-[#faf8f5] dark:bg-[#2d261f]">
+        <div
+          id="invitation-details"
+          className="relative z-10 flex w-full flex-col items-center bg-[#faf8f5] dark:bg-[#2d261f] snap-start"
+        >
           {/* Left ornament decoration */}
           <Image
             src="/frame/ornament.png"
@@ -244,7 +251,7 @@ export const MainInvitation = () => {
           />
 
           {/* Top Ornament */}
-          <div className="relative w-2/3 max-w-55 h-10 mt-12 mb-4">
+          <div className="scroll-reveal opacity-0 relative w-2/3 max-w-55 h-10 mt-12 mb-4">
             <Image
               src="/frame/ornament.png"
               alt=""
@@ -254,7 +261,7 @@ export const MainInvitation = () => {
           </div>
 
           {/* ================= HEADER SECTION ================= */}
-          <div className="text-center px-6 pt-2 pb-8 flex flex-col items-center">
+          <div className="scroll-reveal opacity-0 text-center px-6 pt-2 pb-8 flex flex-col items-center">
             <span className="text-[#aa7c11] text-base font-playfair tracking-[0.25em] uppercase font-bold mb-1">
               Wedding Invitation
             </span>
@@ -318,12 +325,12 @@ export const MainInvitation = () => {
           </section>
 
           {/* ================= PROGRAM SCHEDULING ================= */}
-          <section className="scroll-reveal opacity-0 translate-y-8 w-full px-6 flex flex-col items-center">
-            <h3 className="font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-8 leading-relaxed text-center">
+          <section className="translate-y-8 w-full px-6 flex flex-col items-center">
+            <h3 className="scroll-reveal opacity-0 font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-8 leading-relaxed text-center">
               កម្មវិធីអាពាហ៍ពិពាហ៍
             </h3>
 
-            <div className="relative w-full pl-8 border-l-2 border-[#eddca7]/40 flex flex-col gap-8 text-left pb-4">
+            <div className="scroll-reveal opacity-0 relative w-full pl-8 border-l-2 border-[#eddca7]/40 flex flex-col gap-8 text-left pb-4">
               {/* Ceremony 1 */}
               <div className="relative">
                 {/* Timeline pin */}

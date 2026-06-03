@@ -10,30 +10,21 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const startAudio = async () => {
-      const audio = audioRef.current;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-      if (!audio) return;
+    audio.muted = true;
 
-      try {
-        await audio.play();
+    audio
+      .play()
+      .then(() => {
+        audio.muted = false;
         setIsMusicPlaying(true);
-      } catch (error) {
-        console.error("Audio autoplay blocked:", error);
+      })
+      .catch(() => {
+        audio.muted = false;
         setIsMusicPlaying(false);
-      }
-
-      document.removeEventListener("click", startAudio);
-      document.removeEventListener("touchstart", startAudio);
-    };
-
-    document.addEventListener("click", startAudio);
-    document.addEventListener("touchstart", startAudio);
-
-    return () => {
-      document.removeEventListener("click", startAudio);
-      document.removeEventListener("touchstart", startAudio);
-    };
+      });
   }, []);
 
   const playMusic = async () => {
@@ -62,12 +53,12 @@ export default function Home() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-zinc-50 flex items-center justify-center font-kantumruy text-zinc-400 text-sm">
+        <div className="min-h-screen bg-zinc-50 dark:bg-[#1a1715] flex items-center justify-center font-kantumruy text-zinc-500 dark:text-zinc-300 text-sm">
           កំពុងរៀបចំសំបុត្រអញ្ជើញ...
         </div>
       }
     >
-      <div className="fixed right-0 top-0 z-30 flex items-center justify-end px-6 py-4">
+      <div className="fixed right-0 top-0 z-30 flex items-center justify-end px-6 py-4 bg-transparent">
         <audio
           ref={audioRef}
           loop
