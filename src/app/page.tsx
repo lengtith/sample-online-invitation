@@ -1,28 +1,62 @@
 "use client";
 
-import React, { Suspense, useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 
-import { InvitationInner } from "@/components/InvitationInner";
 import { MainInvitation } from "@/components/MainInvitation";
 
 export default function Home() {
-  const [showContent, setShowContent] = React.useState<boolean>(false);
-  const [isMusicPlaying, setIsMusicPlaying] = React.useState<boolean>(true);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const playMusic = () => {
-    if (audioRef.current) {
-      audioRef.current.play();
+  useEffect(() => {
+    const startAudio = async () => {
+      const audio = audioRef.current;
+
+      if (!audio) return;
+
+      try {
+        await audio.play();
+        setIsMusicPlaying(true);
+      } catch (error) {
+        console.error("Audio autoplay blocked:", error);
+        setIsMusicPlaying(false);
+      }
+
+      document.removeEventListener("click", startAudio);
+      document.removeEventListener("touchstart", startAudio);
+    };
+
+    document.addEventListener("click", startAudio);
+    document.addEventListener("touchstart", startAudio);
+
+    return () => {
+      document.removeEventListener("click", startAudio);
+      document.removeEventListener("touchstart", startAudio);
+    };
+  }, []);
+
+  const playMusic = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    try {
+      await audio.play();
       setIsMusicPlaying(true);
+    } catch (error) {
+      console.error("Unable to play audio:", error);
+      setIsMusicPlaying(false);
     }
   };
 
   const pauseMusic = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsMusicPlaying(false);
-    }
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    audio.pause();
+    setIsMusicPlaying(false);
   };
 
   return (
@@ -33,25 +67,37 @@ export default function Home() {
         </div>
       }
     >
-      <div className="fixed w-full z-30 flex items-center justify-end px-6 py-4 bg-transparent">
-        {/* <button
-          className={`${showContent ? "block" : "opacity-0 pointer-events-none"}`}
-          onClick={() => setShowContent(false)}
+      <div className="fixed right-0 top-0 z-30 flex items-center justify-end px-6 py-4">
+        <audio
+          ref={audioRef}
+          loop
+          playsInline
+          preload="auto"
+          onPlay={() => setIsMusicPlaying(true)}
+          onPause={() => setIsMusicPlaying(false)}
         >
-          🔙
-        </button> */}
-
-        <audio ref={audioRef} autoPlay loop>
           <source src="/music/wedding.mp3" type="audio/mpeg" />
         </audio>
+
         {isMusicPlaying ? (
-          <button onClick={pauseMusic}>🔊</button>
+          <button
+            onClick={pauseMusic}
+            className="text-xl"
+            aria-label="Pause music"
+          >
+            🔊
+          </button>
         ) : (
-          <button onClick={playMusic}>🔇</button>
+          <button
+            onClick={playMusic}
+            className="text-xl"
+            aria-label="Play music"
+          >
+            🔇
+          </button>
         )}
       </div>
 
-      {/* <InvitationInner /> */}
       <MainInvitation />
     </Suspense>
   );

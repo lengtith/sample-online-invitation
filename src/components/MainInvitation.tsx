@@ -175,7 +175,7 @@ export const MainInvitation = () => {
               alt=""
               width={1000}
               height={300}
-              className="absolute object-contain -top-48 left-0 w-full h-auto"
+              className="absolute object-contain -top-48 left-0 max-h-64"
               priority
             />
 
