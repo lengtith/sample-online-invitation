@@ -3,7 +3,12 @@
 import { DEFAULT_WISHES, type Wish } from "@/constants/data";
 import Image from "next/image";
 import React from "react";
-import { animate } from "animejs";
+
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 import { tsParticles } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
@@ -33,46 +38,89 @@ export const MainInvitation = () => {
   const [hasSubmittedRSVP, setHasSubmittedRSVP] =
     React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    const container = mainRef.current;
-    if (!container) return;
+  useGSAP(
+    () => {
+      if (!mainRef.current) return;
 
-    const targets = Array.from(
-      container.querySelectorAll<HTMLElement>(".scroll-reveal"),
-    );
+      const getFrom = (el: HTMLElement): gsap.TweenVars => {
+        const dir = el.dataset.animate ?? "up";
+        if (dir === "left") return { opacity: 0, x: -40 };
+        if (dir === "right") return { opacity: 0, x: 40 };
+        if (dir === "down") return { opacity: 0, y: -40 };
+        if (dir === "scale") return { opacity: 0, scale: 0.8 };
+        return { opacity: 0, y: 40 };
+      };
 
-    const resetReveal = (el: HTMLElement) => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(24px)";
-    };
+      const toVars: gsap.TweenVars = {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        ease: "power2.out",
+      };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const target = entry.target as HTMLElement;
-          if (entry.isIntersecting) {
-            animate(target, {
-              opacity: [0, 1],
-              translateY: [24, 0],
-              duration: 700,
-              easing: "easeOutQuad",
-              delay: 100,
-            });
-          } else {
-            resetReveal(target);
-          }
-        });
-      },
-      { threshold: 0.2 },
-    );
+      const targets =
+        mainRef.current.querySelectorAll<HTMLElement>(".scroll-reveal");
 
-    targets.forEach((el) => {
-      resetReveal(el);
-      observer.observe(el);
-    });
+      targets.forEach((el) => {
+        gsap.set(el, getFrom(el));
 
-    return () => observer.disconnect();
-  }, []);
+        if (el.dataset.animateOnload !== undefined) {
+          gsap.to(el, { ...toVars, delay: 0.3 });
+          return;
+        }
+
+        const delay = el.dataset.animateDelay
+          ? parseFloat(el.dataset.animateDelay)
+          : 0;
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: el,
+              scroller: mainRef.current,
+              start: "top 100%",
+              toggleActions: "play reverse play reverse",
+            },
+          })
+          .to(el, { ...toVars, delay });
+      });
+
+      // Photo section: trigger on the section, animate image scale-down + text fade-up
+      const photoSection =
+        mainRef.current.querySelector<HTMLElement>(".photo-section");
+      const photoImg = mainRef.current.querySelector<HTMLElement>(".photo-img");
+      const photoText =
+        mainRef.current.querySelector<HTMLElement>(".photo-text");
+
+      if (photoSection && photoImg && photoText) {
+        gsap.set(photoImg, { opacity: 0, scale: 1.15 });
+        gsap.set(photoText, { opacity: 0, y: 40 });
+
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: photoSection,
+              scroller: mainRef.current,
+              start: "top 100%",
+              toggleActions: "play reverse play reverse",
+            },
+          })
+          .to(photoImg, {
+            opacity: 1,
+            scale: 1,
+            duration: 1.2,
+            ease: "power3.out",
+          })
+          .to(
+            photoText,
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+            "-=0.6",
+          );
+      }
+    },
+    { scope: mainRef },
+  );
 
   React.useEffect(() => {
     const initParticles = async () => {
@@ -167,68 +215,94 @@ export const MainInvitation = () => {
         className="relative flex flex-col w-full max-w-md overflow-y-auto overflow-x-hidden min-h-screen h-screen snap-y snap-mandatory no-scrollbar"
       >
         {/* ================== INTRO INVITATION ================== */}
-        <div className="relative flex flex-1 w-full max-w-md flex-col items-center justify-center bg-white dark:bg-[#2d261f] overflow-hidden shadow-xl min-h-screen h-screen snap-start">
-          {/* Center content */}
-          <div className="relative z-10 flex flex-col w-2/3 h-screen items-center justify-center py-16">
-            {/* Top ornament */}
-            <Image
-              src="/frame/ornament.png"
-              alt=""
-              width={1000}
-              height={300}
-              className="absolute object-contain -top-48 left-0 max-h-64"
-              priority
-            />
+        <section className="relative flex flex-1 w-full max-w-md flex-col items-center justify-center bg-white dark:bg-[#2d261f] overflow-hidden shadow-xl min-h-screen h-screen snap-start">
+          {/* Top ornament */}
+          <Image
+            src="/frame/ornament.png"
+            alt=""
+            width={1000}
+            height={300}
+            className="scroll-reveal absolute object-contain -top-48 left-0 max-h-64"
+            priority
+            data-animate="down"
+          />
 
-            <div className="w-full h-full flex flex-col items-center justify-between text-center">
-              <h1 className="scroll-reveal text-3xl font-moul text-amber-800 dark:text-[#f3e5ab] leading-relaxed">
-                សិរីសួស្ដីអាពាហ៍ពិពាហ៍
+          <div className="w-full h-full flex flex-col items-center justify-between text-center pt-20 pb-10 px-6">
+            <h1
+              className="scroll-reveal text-3xl font-moul text-amber-800 dark:text-[#f3e5ab] leading-relaxed"
+              data-animate="up"
+            >
+              សិរីសួស្ដីអាពាហ៍ពិពាហ៍
+            </h1>
+
+            <div
+              className="scroll-reveal relative w-full flex items-center justify-center flex-col"
+              data-animate="up"
+            >
+              <Image
+                src="/heart-to-heart-thumbnail.png"
+                alt=""
+                width={1000}
+                height={300}
+                className="absolute object-contain w-2/4 h-auto opacity-95"
+              />
+              <h1 className="relative z-10 text-7xl font-moul text-amber-900 dark:text-[#eddca7] leading-[0.7] mt-44">
+                វស
               </h1>
+              {/* Date */}
+              <p className="relative z-10 text-3xl font-kantumruy font-medium text-zinc-700 dark:text-zinc-300 mt-7">
+                ០៩.០៦.២០២៦
+              </p>
+            </div>
 
-              <div className="scroll-reveal opacity-0 relative w-full flex items-center justify-center flex-col">
+            <div
+              className="scroll-reveal w-full relative flex flex-col items-center"
+              data-animate="up"
+            >
+              <p className="text-xl font-kantumruy font-medium text-zinc-600 dark:text-zinc-300">
+                សូមគោរពអញ្ជើញ
+              </p>
+
+              <Link
+                href="#invitation-details"
+                className="relative w-full flex items-center justify-center flex-col mt-6 min-h-20 cursor-pointer active:scale-95 duration-150 ease-out transition-transform"
+              >
                 <Image
-                  src="/heart-to-heart-thumbnail.png"
+                  src="/frame/decoration-border-name.png"
                   alt=""
-                  width={1000}
-                  height={300}
-                  className="absolute object-contain w-2/3 h-auto opacity-95"
+                  width={200}
+                  height={100}
+                  className="absolute object-center w-2/3 h-auto opacity-90"
                 />
-                <h1 className="relative z-10 text-7xl font-moul text-amber-900 dark:text-[#eddca7] leading-[0.7] mt-44">
-                  វស
-                </h1>
-                {/* Date */}
-                <p className="relative z-10 text-3xl font-kantumruy font-medium text-zinc-700 dark:text-zinc-300 mt-7">
-                  ០៩.០៦.២០២៦
-                </p>
-              </div>
-
-              <div className="scroll-reveal opacity-0 w-full relative flex flex-col items-center">
-                <p className="text-xl font-kantumruy font-medium text-zinc-600 dark:text-zinc-300">
-                  សូមគោរពអញ្ជើញ
-                </p>
-
-                <Link
-                  href="#invitation-details"
-                  className="relative w-full flex items-center justify-center flex-col mt-6 min-h-20 cursor-pointer active:scale-95 duration-150 ease-out transition-transform"
-                >
-                  <Image
-                    src="/frame/decoration-border-name.png"
-                    alt=""
-                    width={300}
-                    height={1000}
-                    className="absolute object-center w-full h-auto opacity-90"
-                  />
-                  <h4 className="relative z-10 text-xl font-bold font-moul text-amber-950 dark:text-[#f3e5ab] px-4 py-2">
-                    លោក ស្រី សុខា
-                  </h4>
-                </Link>
-              </div>
+                <h4 className="relative z-10 text-xl font-bold font-moul text-amber-950 dark:text-[#f3e5ab] px-4 py-2">
+                  លោក ស្រី សុខា
+                </h4>
+              </Link>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* ================= WEDDING PHOTOGRAPHY ================= */}
+        <section className="photo-section relative w-full h-screen min-h-screen snap-start flex items-end overflow-hidden">
+          <Image
+            src={"/wedding-photo.jpeg"}
+            alt="Wedding Photography"
+            width={1000}
+            height={600}
+            className="photo-img absolute w-full h-full object-cover"
+          />
+          <div className="photo-text relative z-10 w-full bg-gradient-to-t from-[#111] to-transparent p-6 text-center">
+            <h2 className="text-5xl text-amber-100 mb-2 font-parisienne">
+              Save the Date
+            </h2>
+            <p className="text-amber-100 text-base font-kantumruy">
+              TUESDAY, JUNE 9TH, 2026
+            </p>
+          </div>
+        </section>
 
         {/* ================= INVITATION DETAILS & PROGRAM ================= */}
-        <div
+        <section
           id="invitation-details"
           className="relative z-10 flex w-full flex-col items-center bg-[#faf8f5] dark:bg-[#2d261f] snap-start"
         >
@@ -251,7 +325,10 @@ export const MainInvitation = () => {
           />
 
           {/* Top Ornament */}
-          <div className="scroll-reveal opacity-0 relative w-2/3 max-w-55 h-10 mt-12 mb-4">
+          <div
+            className="scroll-reveal relative w-20 h-20 mt-12 mb-4"
+            data-animate="scale"
+          >
             <Image
               src="/frame/ornament.png"
               alt=""
@@ -260,8 +337,39 @@ export const MainInvitation = () => {
             />
           </div>
 
+          {/* Top Left Flower */}
+          <div
+            className="scroll-reveal absolute top-0 left-0 w-40 h-40"
+            data-animate="down"
+            data-animate-delay="1"
+          >
+            <Image
+              src="/frame/flower.png"
+              alt=""
+              fill
+              className="object-contain"
+            />
+          </div>
+
+          {/* Top Right Flower */}
+          <div
+            className="scroll-reveal absolute top-0 right-0 w-40 h-40"
+            data-animate="down"
+            data-animate-delay="1"
+          >
+            <Image
+              src="/frame/flower.png"
+              alt=""
+              fill
+              className="object-contain -scale-x-100"
+            />
+          </div>
+
           {/* ================= HEADER SECTION ================= */}
-          <div className="scroll-reveal opacity-0 text-center px-6 pt-2 pb-8 flex flex-col items-center">
+          <div
+            className="scroll-reveal text-center px-6 pt-2 pb-8 flex flex-col items-center"
+            data-animate="up"
+          >
             <span className="text-[#aa7c11] text-base font-playfair tracking-[0.25em] uppercase font-bold mb-1">
               Wedding Invitation
             </span>
@@ -272,7 +380,10 @@ export const MainInvitation = () => {
           </div>
 
           {/* ================= PARENTS DETAILS ================= */}
-          <section className="scroll-reveal opacity-0 translate-y-8 w-full px-6 flex flex-col gap-6 text-center">
+          <section
+            className="scroll-reveal w-full px-6 flex flex-col gap-6 text-center"
+            data-animate="left"
+          >
             {/* Groom Parents Panel */}
             <div className="bg-[#fdfcf9] dark:bg-[#1a1715]/40 p-5 rounded-2xl border border-amber-200/20 shadow-sm flex flex-col items-center">
               <span className="text-sm text-amber-700 dark:text-[#d4af37] font-bold uppercase tracking-wider mb-2">
@@ -311,7 +422,10 @@ export const MainInvitation = () => {
           </section>
 
           {/* ================= HEART IMAGE ACCENT ================= */}
-          <section className="scroll-reveal opacity-0 translate-y-8 relative w-full my-12 flex flex-col items-center justify-center">
+          <section
+            className="scroll-reveal relative w-full my-12 flex flex-col items-center justify-center"
+            data-animate="scale"
+          >
             <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-[#1a1715] shadow-lg z-10">
               <Image
                 src="/heart-to-heart-thumbnail.png"
@@ -326,11 +440,17 @@ export const MainInvitation = () => {
 
           {/* ================= PROGRAM SCHEDULING ================= */}
           <section className="translate-y-8 w-full px-6 flex flex-col items-center">
-            <h3 className="scroll-reveal opacity-0 font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-8 leading-relaxed text-center">
+            <h3
+              className="scroll-reveal font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-8 leading-relaxed text-center"
+              data-animate="up"
+            >
               កម្មវិធីអាពាហ៍ពិពាហ៍
             </h3>
 
-            <div className="scroll-reveal opacity-0 relative w-full pl-8 border-l-2 border-[#eddca7]/40 flex flex-col gap-8 text-left pb-4">
+            <div
+              className="scroll-reveal relative w-full pl-8 border-l-2 border-[#eddca7]/40 flex flex-col gap-8 text-left pb-4"
+              data-animate="left"
+            >
               {/* Ceremony 1 */}
               <div className="relative">
                 {/* Timeline pin */}
@@ -398,7 +518,10 @@ export const MainInvitation = () => {
           </section>
 
           {/* ================= VENUE LOCATION ================= */}
-          <section className="scroll-reveal opacity-0 translate-y-8 w-full px-6 py-12 flex flex-col items-center border-t border-b border-zinc-100 dark:border-zinc-800 mt-8">
+          <section
+            className="scroll-reveal w-full px-6 py-12 flex flex-col items-center border-t border-b border-zinc-100 dark:border-zinc-800 mt-8"
+            data-animate="right"
+          >
             <h3 className="font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-6 leading-relaxed text-center">
               ទីតាំងប្រារព្ធពិធី
             </h3>
@@ -425,7 +548,10 @@ export const MainInvitation = () => {
           </section>
 
           {/* ================= RSVP & WISHES FORM ================= */}
-          <section className="scroll-reveal opacity-0 translate-y-8 w-full px-6 py-12 flex flex-col items-center bg-[#fdfcf9]/50 dark:bg-black/10">
+          <section
+            className="scroll-reveal w-full px-6 py-12 flex flex-col items-center bg-[#fdfcf9]/50 dark:bg-black/10"
+            data-animate="up"
+          >
             <h3 className="font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-6 leading-relaxed text-center">
               បញ្ជាក់ការចូលរួម និងពាក្យជូនពរ
             </h3>
@@ -585,7 +711,10 @@ export const MainInvitation = () => {
           </section>
 
           {/* ================= BLESSINGS WALL ================= */}
-          <section className="scroll-reveal opacity-0 translate-y-8 w-full px-6 py-4 flex flex-col items-center">
+          <section
+            className="scroll-reveal w-full px-6 py-4 flex flex-col items-center"
+            data-animate="up"
+          >
             <h3 className="font-moul text-xl text-amber-800 dark:text-[#f3e5ab] mb-6 leading-relaxed text-center">
               ពាក្យជូនពរពីភ្ញៀវកិត្តិយស
             </h3>
@@ -638,7 +767,7 @@ export const MainInvitation = () => {
               Thank You
             </span>
           </footer>
-        </div>
+        </section>
       </main>
     </div>
   );

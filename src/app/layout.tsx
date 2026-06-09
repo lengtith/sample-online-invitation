@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Moul, Kantumruy_Pro, Playfair_Display } from "next/font/google";
+import {
+  Moul,
+  Kantumruy_Pro,
+  Playfair_Display,
+  Parisienne,
+} from "next/font/google";
 import "./globals.css";
 
 const moul = Moul({
@@ -23,9 +28,17 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const parisienne = Parisienne({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-parisienne",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "សិរីសួស្ដីអាពាហ៍ពិពាហ៍ - ពិធីមង្គលការ",
-  description: "សំបុត្រអញ្ជើញអាពាហ៍ពិពាហ៍ អបអរសាទរគូស្វាមីភរិយាថ្មី សុខ វឌ្ឍនា & ចាន់ ស្រីនាថ",
+  description:
+    "សំបុត្រអញ្ជើញអាពាហ៍ពិពាហ៍ អបអរសាទរគូស្វាមីភរិយាថ្មី សុខ វឌ្ឍនា & ចាន់ ស្រីនាថ",
 };
 
 export default function RootLayout({
@@ -36,7 +49,7 @@ export default function RootLayout({
   return (
     <html
       lang="km"
-      className={`${kantumruy.variable} ${moul.variable} ${playfair.variable} h-full antialiased`}
+      className={`${kantumruy.variable} ${moul.variable} ${parisienne.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

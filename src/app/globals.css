@@ -16,6 +16,7 @@
   --font-moul: var(--font-moul);
   --font-kantumruy: var(--font-kantumruy);
   --font-playfair: var(--font-playfair);
+  --font-parisienne: var(--font-parisienne);
 }
 
 /* Base resets & typography */
@@ -40,6 +41,10 @@ body {
 
 .font-playfair {
   font-family: var(--font-playfair), serif;
+}
+
+.font-parisienne {
+  font-family: var(--font-parisienne), cursive;
 }
 
 /* Custom premium scrollbar for smooth visual aesthetic */
