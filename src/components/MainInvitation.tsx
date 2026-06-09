@@ -339,7 +339,7 @@ export const MainInvitation = () => {
 
           {/* Top Left Flower */}
           <div
-            className="scroll-reveal absolute top-0 left-0 w-40 h-40"
+            className="scroll-reveal absolute top-2 left-0 w-40 h-40"
             data-animate="down"
             data-animate-delay="1"
           >
@@ -353,7 +353,7 @@ export const MainInvitation = () => {
 
           {/* Top Right Flower */}
           <div
-            className="scroll-reveal absolute top-0 right-0 w-40 h-40"
+            className="scroll-reveal absolute top-2 right-0 w-40 h-40"
             data-animate="down"
             data-animate-delay="1"
           >
