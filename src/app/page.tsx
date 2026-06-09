@@ -1,31 +1,32 @@
 "use client";
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useRef, useState } from "react";
 
 import { MainInvitation } from "@/components/MainInvitation";
 
 export default function Home() {
+  "use no memo";
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+  // useEffect(() => {
+  //   const audio = audioRef.current;
+  //   if (!audio) return;
 
-    audio.muted = true;
+  //   audio.muted = true;
 
-    audio
-      .play()
-      .then(() => {
-        audio.muted = false;
-        setIsMusicPlaying(true);
-      })
-      .catch(() => {
-        audio.muted = false;
-        setIsMusicPlaying(false);
-      });
-  }, []);
+  //   audio
+  //     .play()
+  //     .then(() => {
+  //       audio.muted = false;
+  //       setIsMusicPlaying(true);
+  //     })
+  //     .catch(() => {
+  //       audio.muted = false;
+  //       setIsMusicPlaying(false);
+  //     });
+  // }, []);
 
   const playMusic = async () => {
     const audio = audioRef.current;
