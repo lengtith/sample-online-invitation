@@ -86,37 +86,98 @@ export const MainInvitation = () => {
           .to(el, { ...toVars, delay });
       });
 
-      // Photo section: trigger on the section, animate image scale-down + text fade-up
+      // Photo section: tile dissolve reveal + text fade-up
       const photoSection =
         mainRef.current.querySelector<HTMLElement>(".photo-section");
-      const photoImg = mainRef.current.querySelector<HTMLElement>(".photo-img");
+      const photoTileGrid =
+        mainRef.current.querySelector<HTMLElement>(".photo-tile-grid");
       const photoText =
         mainRef.current.querySelector<HTMLElement>(".photo-text");
 
-      if (photoSection && photoImg && photoText) {
-        gsap.set(photoImg, { opacity: 0, scale: 1.15 });
+      if (photoSection && photoTileGrid && photoText) {
+        const SLATS = 10;
+        const center = (SLATS - 1) / 2;
+
+        // Vertical slats each showing their column of the photo using cover sizing
+        const slatEls: HTMLElement[] = [];
+        const containerW = photoSection.offsetWidth;
+        const containerH = photoSection.offsetHeight;
+        const slatW = containerW / SLATS;
+
         gsap.set(photoText, { opacity: 0, y: 40 });
 
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: photoSection,
-              scroller: mainRef.current,
-              start: "top 100%",
-              toggleActions: "play reverse play reverse",
-            },
-          })
-          .to(photoImg, {
-            opacity: 1,
-            scale: 1,
-            duration: 1.2,
-            ease: "power3.out",
-          })
-          .to(
-            photoText,
-            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-            "-=0.6",
+        const buildSlats = (imgW: number, imgH: number) => {
+          // Compute cover-scaled dimensions matching the full container
+          const scale = Math.max(containerW / imgW, containerH / imgH);
+          const coveredW = imgW * scale;
+          const coveredH = imgH * scale;
+          const offsetX = (containerW - coveredW) / 2;
+          const offsetY = (containerH - coveredH) / 2;
+
+          for (let i = 0; i < SLATS; i++) {
+            const slat = document.createElement("div");
+            slat.style.cssText = `
+              position: absolute;
+              height: 100%;
+              width: ${100 / SLATS}%;
+              top: 0;
+              left: ${i * (100 / SLATS)}%;
+              background-image: url('/wedding-photo.jpeg');
+              background-size: ${coveredW}px ${coveredH}px;
+              background-position: ${offsetX - i * slatW}px ${offsetY}px;
+              background-repeat: no-repeat;
+              transform-origin: center center;
+              transform: scaleX(0);
+            `;
+            photoTileGrid.appendChild(slat);
+            slatEls.push(slat);
+          }
+
+          // Sort from center outward so stagger radiates left and right simultaneously
+          const slatsFromCenter = [...slatEls].sort(
+            (a, b) =>
+              Math.abs(slatEls.indexOf(a) - center) -
+              Math.abs(slatEls.indexOf(b) - center),
           );
+
+          const reveal = () => {
+            gsap.set(slatEls, { scaleX: 0 });
+            gsap.to(slatsFromCenter, {
+              scaleX: 1,
+              duration: 0.5,
+              stagger: 0.07,
+              ease: "power2.out",
+              onComplete: () => {
+                gsap.to(photoText, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+              },
+            });
+          };
+
+          const reset = () => {
+            gsap.killTweensOf(slatEls);
+            gsap.killTweensOf(photoText);
+            gsap.set(slatEls, { scaleX: 0 });
+            gsap.set(photoText, { opacity: 0, y: 40 });
+          };
+
+          ScrollTrigger.create({
+            trigger: photoSection,
+            scroller: mainRef.current,
+            start: "top 100%",
+            onEnter: reveal,
+            onLeaveBack: reset,
+            onEnterBack: reveal,
+            onLeave: reset,
+          });
+        };
+
+        const img = new window.Image();
+        img.src = "/wedding-photo.jpeg";
+        if (img.complete) {
+          buildSlats(img.naturalWidth, img.naturalHeight);
+        } else {
+          img.onload = () => buildSlats(img.naturalWidth, img.naturalHeight);
+        }
       }
     },
     { scope: mainRef },
@@ -289,9 +350,11 @@ export const MainInvitation = () => {
             alt="Wedding Photography"
             width={1000}
             height={600}
-            className="photo-img absolute w-full h-full object-cover"
+            className="absolute w-full h-full object-cover"
           />
-          <div className="photo-text relative z-10 w-full bg-gradient-to-t from-[#111] to-transparent p-6 text-center">
+          {/* Tile grid overlay for dissolve effect */}
+          <div className="photo-tile-grid absolute inset-0 z-10" />
+          <div className="photo-text relative z-20 w-full bg-gradient-to-t from-[#111] to-transparent p-6 text-center">
             <h2 className="text-5xl text-amber-100 mb-2 font-parisienne">
               Save the Date
             </h2>
