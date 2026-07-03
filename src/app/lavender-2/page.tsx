@@ -6,7 +6,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import FallingPetals from "@/components/FallingPetals";
-import BackgroundMusic from "@/components/BackgroundMusic";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -185,7 +184,6 @@ export default function LavenderPage() {
 
   return (
     <div className="relative h-screen w-full">
-      <BackgroundMusic src="/video/wedding-music.mp4" />
       <div
         ref={scrollerRef}
         className="relative h-screen max-w-md mx-auto bg-[url('/lavender-2/background.jpg')] bg-cover bg-center overflow-y-auto overflow-x-hidden no-scrollbar snap-y snap-mandatory"
