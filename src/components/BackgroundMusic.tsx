@@ -43,6 +43,7 @@ export default function BackgroundMusic({ src }: { src: string }) {
         ref={audioRef}
         src={src}
         loop
+        muted
         playsInline
         autoPlay
         className="fixed w-px h-px opacity-0 pointer-events-none"
