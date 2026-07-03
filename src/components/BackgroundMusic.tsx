@@ -4,14 +4,18 @@ import { useEffect, useRef, useState } from "react";
 
 export default function BackgroundMusic({ src }: { src: string }) {
   const audioRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const hasUnmutedRef = useRef(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const tryPlay = () => {
+      if (hasUnmutedRef.current) return;
+      hasUnmutedRef.current = true;
       audio.muted = false;
+      setIsMuted(false);
       audio.play().catch(() => {});
     };
 
@@ -32,9 +36,11 @@ export default function BackgroundMusic({ src }: { src: string }) {
   const toggleMute = () => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.muted = !audio.muted;
-    setIsMuted(audio.muted);
-    if (!audio.muted) audio.play().catch(() => {});
+    hasUnmutedRef.current = true;
+    const nextMuted = !audio.muted;
+    audio.muted = nextMuted;
+    setIsMuted(nextMuted);
+    if (!nextMuted) audio.play().catch(() => {});
   };
 
   return (
