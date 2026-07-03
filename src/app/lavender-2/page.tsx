@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import FallingPetals from "@/components/FallingPetals";
+import BackgroundMusic from "@/components/BackgroundMusic";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -184,6 +185,7 @@ export default function LavenderPage() {
 
   return (
     <div className="relative h-screen w-full">
+      <BackgroundMusic src="/video/wedding-music.mp4" />
       <div
         ref={scrollerRef}
         className="relative h-screen max-w-md mx-auto bg-[url('/lavender-2/background.jpg')] bg-cover bg-center overflow-y-auto overflow-x-hidden no-scrollbar snap-y snap-mandatory"
@@ -600,7 +602,7 @@ export default function LavenderPage() {
                   <div className="self-stretch justify-end text-[#613A90] text-base font-normal font-kantumruy leading-7">
                     ឈ្មោះរបស់អ្នក
                   </div>
-                  <div className="self-stretch h-11 px-4 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus:outline-2 has-focus:outline-[#613A90] transition-[outline-color,outline-width] inline-flex justify-start items-center gap-3">
+                  <div className="self-stretch h-9 px-4 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus:outline-2 has-focus:outline-[#613A90] transition-[outline-color,outline-width] inline-flex justify-start items-center gap-3">
                     <input
                       type="text"
                       placeholder="បញ្ចូលឈ្មោះរបស់អ្នក"
@@ -608,18 +610,18 @@ export default function LavenderPage() {
                     />
                   </div>
                 </div>
-                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                {/* <div className="self-stretch flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch justify-end text-[#613A90] text-base font-normal font-kantumruy leading-7">
                     ត្រូវជាអ្វីនឹងម្ចាស់ដើមការ
                   </div>
-                  <div className="self-stretch h-11 px-4 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus:outline-2 has-focus:outline-[#613A90] transition-[outline-color,outline-width] inline-flex justify-start items-center gap-3">
+                  <div className="self-stretch h-9 px-4 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus:outline-2 has-focus:outline-[#613A90] transition-[outline-color,outline-width] inline-flex justify-start items-center gap-3">
                     <input
                       type="text"
                       placeholder="មិត្ដភក្ដិ"
                       className="flex-1 min-w-0 h-full bg-transparent text-[#613A90] placeholder:text-[#613A90]/40 text-base font-normal font-kantumruy outline-none"
                     />
                   </div>
-                </div>
+                </div> */}
                 <div className="self-stretch flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch justify-end text-[#613A90] text-base font-normal font-kantumruy leading-7">
                     តើអ្នកនឹងចូលរួមឬទេ?
@@ -627,7 +629,7 @@ export default function LavenderPage() {
                   <div className="self-stretch inline-flex justify-start items-stretch gap-3.5">
                     <label
                       htmlFor="rsvp-attending"
-                      className="flex-1 h-11 px-3 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus-visible:outline-2 has-focus-visible:outline-[#613A90] transition-[outline-color,outline-width] flex justify-between items-center cursor-pointer"
+                      className="flex-1 h-9 px-3 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus-visible:outline-2 has-focus-visible:outline-[#613A90] transition-[outline-color,outline-width] flex justify-between items-center cursor-pointer"
                     >
                       <span className="justify-start text-[#613A90] font-normal font-kantumruy leading-6">
                         ចូលរួម
@@ -641,7 +643,7 @@ export default function LavenderPage() {
                     </label>
                     <label
                       htmlFor="rsvp-not-attending"
-                      className="flex-1 h-11 px-3 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus-visible:outline-2 has-focus-visible:outline-[#613A90] transition-[outline-color,outline-width] flex justify-between items-center cursor-pointer"
+                      className="flex-1 h-9 px-3 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus-visible:outline-2 has-focus-visible:outline-[#613A90] transition-[outline-color,outline-width] flex justify-between items-center cursor-pointer"
                     >
                       <span className="justify-start text-[#613A90] font-normal font-kantumruy leading-6">
                         មិនបានចូលរួម
@@ -659,7 +661,7 @@ export default function LavenderPage() {
                   <div className="self-stretch justify-end text-[#613A90] text-base font-normal font-kantumruy leading-7">
                     ចំនួននាក់នឹងទៅចូលរួម
                   </div>
-                  <div className="self-stretch h-11 px-4 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus:outline-2 has-focus:outline-[#613A90] transition-[outline-color,outline-width] inline-flex justify-start items-center gap-4">
+                  <div className="self-stretch h-9 px-4 rounded-lg outline outline-offset-[-1.12px] outline-[#613A90]/20 has-focus:outline-2 has-focus:outline-[#613A90] transition-[outline-color,outline-width] inline-flex justify-start items-center gap-4">
                     <input
                       type="number"
                       min={1}
