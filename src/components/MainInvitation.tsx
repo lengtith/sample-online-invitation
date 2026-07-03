@@ -3,10 +3,14 @@
 import { DEFAULT_WISHES, type Wish } from "@/constants/data";
 import Image from "next/image";
 import React from "react";
+import dynamic from "next/dynamic";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+
+import goldSparkle from "../../public/lottie/gold-sparkle.json";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -270,6 +274,16 @@ export const MainInvitation = () => {
         id="tsparticles"
         className="max-w-md mx-auto overflow-x-hidden pointer-events-none absolute inset-0 z-20 overflow-hidden"
       />
+
+      {/* Lottie gold sparkle overlay */}
+      <div className="pointer-events-none absolute inset-0 z-10 max-w-md mx-auto left-0 right-0 overflow-hidden">
+        <Lottie
+          animationData={goldSparkle}
+          loop
+          autoplay
+          style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
+        />
+      </div>
 
       <main
         ref={mainRef}

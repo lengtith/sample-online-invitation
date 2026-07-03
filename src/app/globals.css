@@ -47,6 +47,30 @@ body {
   font-family: var(--font-parisienne), cursive;
 }
 
+@font-face {
+  font-family: "Khmer Pen Surin";
+  src: url("/fonts/khmer-pen-surin-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Khmer Viravuth";
+  src: url("/fonts/Khmer-viravuth-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-pen-surin {
+  font-family: "Khmer Pen Surin", serif;
+}
+
+.font-viravuth {
+  font-family: "Khmer Viravuth", serif;
+}
+
 /* Custom premium scrollbar for smooth visual aesthetic */
 ::-webkit-scrollbar {
   width: 6px;
