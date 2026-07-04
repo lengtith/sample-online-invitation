@@ -1,42 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export default function BackgroundMusic({ src }: { src: string }) {
   const audioRef = useRef<HTMLVideoElement>(null);
-  const hasUnmutedRef = useRef(false);
   const [isMuted, setIsMuted] = useState(true);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const tryPlay = () => {
-      if (hasUnmutedRef.current) return;
-      hasUnmutedRef.current = true;
-      audio.muted = false;
-      setIsMuted(false);
-      audio.play().catch(() => {});
-    };
-
-    const events: (keyof DocumentEventMap)[] = [
-      "pointerdown",
-      "keydown",
-      "scroll",
-    ];
-    events.forEach((event) =>
-      document.addEventListener(event, tryPlay, { once: true }),
-    );
-
-    return () => {
-      events.forEach((event) => document.removeEventListener(event, tryPlay));
-    };
-  }, []);
 
   const toggleMute = () => {
     const audio = audioRef.current;
     if (!audio) return;
-    hasUnmutedRef.current = true;
     const nextMuted = !audio.muted;
     audio.muted = nextMuted;
     setIsMuted(nextMuted);
