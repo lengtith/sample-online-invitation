@@ -200,7 +200,7 @@ export default function LavenderPage() {
               alt=""
               width={200}
               height={200}
-              className="absolute left-1/2 -translate-x-1/2 w-full h-auto"
+              className="absolute inset-x-0 top-0 w-full h-auto"
               unoptimized
             />
 
