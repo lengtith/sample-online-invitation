@@ -222,7 +222,7 @@ export default function LavenderPage() {
               alt=""
               width={200}
               height={200}
-              className="absolute -bottom-14 -left-6 w-72 h-auto"
+              className="absolute -bottom-14 -left-6 w-64 h-auto"
               unoptimized
             />
           </div>
@@ -252,7 +252,7 @@ export default function LavenderPage() {
           {/* <p className="text-xl text-[#613A90] mb-10">07 • 07 • 2026</p> */}
 
           {/* Guest Name */}
-          <div className="flex flex-col items-center gap-3 w-full">
+          <div className="flex flex-col items-center gap-2 w-full">
             <p
               ref={inviteTextRef}
               style={{ opacity: 0 }}
