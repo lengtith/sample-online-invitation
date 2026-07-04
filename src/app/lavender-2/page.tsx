@@ -6,12 +6,15 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import FallingPetals from "@/components/FallingPetals";
-import BackgroundMusic from "@/components/BackgroundMusic";
+import BackgroundMusic, {
+  type BackgroundMusicHandle,
+} from "@/components/BackgroundMusic";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function LavenderPage() {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const musicRef = useRef<BackgroundMusicHandle>(null);
   const welcomeRef = useRef<HTMLHeadingElement>(null);
   const mainWelcomeRef = useRef<HTMLHeadingElement>(null);
   const namesGroupRef = useRef<HTMLDivElement>(null);
@@ -185,7 +188,7 @@ export default function LavenderPage() {
 
   return (
     <div className="relative h-screen w-full">
-      <BackgroundMusic src="/music/beauty-in-white.m4a" />
+      <BackgroundMusic ref={musicRef} src="/music/beauty-in-white.m4a" />
       <div
         ref={scrollerRef}
         className="relative h-screen max-w-md mx-auto bg-[url('/lavender-2/background.jpg')] bg-cover bg-center overflow-y-auto overflow-x-hidden no-scrollbar snap-y snap-mandatory"
@@ -231,7 +234,10 @@ export default function LavenderPage() {
         </div>
 
         {/*Front Content Section */}
-        <section className="relative w-full h-screen flex flex-col justify-center items-center px-6 snap-start">
+        <section
+          onPointerDown={() => musicRef.current?.unmute()}
+          className="relative w-full h-screen flex flex-col justify-center items-center px-6 snap-start"
+        >
           {/* Welcome Message */}
           <h5
             ref={welcomeRef}
