@@ -235,7 +235,7 @@ export default function LavenderPage() {
 
         {/*Front Content Section */}
         <section
-          onPointerDown={() => musicRef.current?.unmute()}
+          onClick={() => musicRef.current?.unmute()}
           className="relative w-full h-screen flex flex-col justify-center items-center px-6 snap-start"
         >
           {/* Welcome Message */}

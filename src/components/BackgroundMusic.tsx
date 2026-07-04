@@ -20,8 +20,12 @@ const BackgroundMusic = forwardRef<BackgroundMusicHandle, { src: string }>(
       const audio = audioRef.current;
       if (!audio || !audio.muted) return;
       audio.muted = false;
-      setIsMuted(false);
-      audio.play().catch(() => {});
+      audio
+        .play()
+        .then(() => setIsMuted(false))
+        .catch(() => {
+          audio.muted = true;
+        });
     };
 
     useImperativeHandle(ref, () => ({ unmute }));
@@ -31,8 +35,16 @@ const BackgroundMusic = forwardRef<BackgroundMusicHandle, { src: string }>(
       if (!audio) return;
       const nextMuted = !audio.muted;
       audio.muted = nextMuted;
-      setIsMuted(nextMuted);
-      if (!nextMuted) audio.play().catch(() => {});
+      if (!nextMuted) {
+        audio
+          .play()
+          .then(() => setIsMuted(false))
+          .catch(() => {
+            audio.muted = true;
+          });
+      } else {
+        setIsMuted(true);
+      }
     };
 
     return (
